@@ -13,4 +13,7 @@ class CreateSuratKeluar extends CreateRecord
 
     protected static string $resource = SuratKeluarResource::class;
 
+    protected static bool $canCreateAnother = false;
+
+
 }
