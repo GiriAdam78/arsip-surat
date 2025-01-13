@@ -15,6 +15,8 @@ use App\Filament\Resources\TambahSuratResource\Pages;
 use App\Filament\Resources\TambahSuratResource\RelationManagers;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\DatePicker;
+use Filament\Tables\Actions\Action;
+
 use Malzariey\FilamentDaterangepickerFilter\Fields\DateRangePicker;
 
 use Filament\Forms\Components\Grid;
@@ -106,6 +108,7 @@ class TambahSuratResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('sifat_surat')
                     ->label('Sifat Surat')
+                    ->color('success')
                     ->sortable()
                     ->searchable(),
             ])
@@ -113,13 +116,22 @@ class TambahSuratResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make()
+                      ->Label('Lihat'),
+                Tables\Actions\EditAction::make()
+                      ->Label('Ubah'),
                 Tables\Actions\DeleteAction::make()
+                      ->Label('Hapus'),
+                Action::make('Print Disposisi')
+                    ->label('Cetak Disposisi')
+                    ->color('success')
+                    ->icon('heroicon-o-printer')
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->label('Hapus Data Terpilih ?')
+
                 ]),
             ]);
     }

@@ -17,7 +17,12 @@ class ListSuratMasuks extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            //
+            Actions\CreateAction::make('Print')
+                ->label('Print Semua Data')
+                ->color('success')
+                ->icon('heroicon-o-printer')
+                ->url(fn () => route('print.surat-masuk')) 
+                ->openUrlInNewTab()
         ];
     }
 }

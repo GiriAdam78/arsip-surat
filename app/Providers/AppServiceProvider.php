@@ -29,6 +29,9 @@ class AppServiceProvider extends ServiceProvider
                 NavigationGroup::make()
                     ->label('Laporan')
                     ->collapsed(),
+                NavigationGroup::make()
+                    ->label('Refrensi')
+                    ->collapsed(),
             ]);
             Filament::registerNavigationItems(
                 [

@@ -67,12 +67,7 @@ class SuratMasukResource extends Resource
             ])
             
             ->actions([
-                Action::make('Print')
-                    ->label('Print')
-                    ->color('success')
-                    ->icon('heroicon-o-printer')
-                    ->url(fn () => route('print.surat-masuk')) 
-                    ->openUrlInNewTab()
+               //
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
