@@ -37,6 +37,7 @@ class SuratMasukResource extends Resource
     {
         return $table
             ->emptyStateHeading('No Data Available')
+            ->emptyStateDescription('Tidak Ada Data Yang Tersedia Saat Ini')
             ->columns([
                 Tables\Columns\TextColumn::make('id')->label('No'),
                 Tables\Columns\TextColumn::make('nomor_agenda')->label('Nomor Agenda'),

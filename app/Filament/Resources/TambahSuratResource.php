@@ -4,33 +4,38 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
+use App\Models\Instansi;
 use Filament\Forms\Form;
+use App\Models\SifatSurat;
 use App\Models\SuratMasuk;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Grid;
+use Filament\Tables\Actions\Action;
 use Filament\Resources\Forms\Components;
+use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\DateTimePicker;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\TambahSuratResource\Pages;
 use App\Filament\Resources\TambahSuratResource\RelationManagers;
-use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\DatePicker;
-use Filament\Tables\Actions\Action;
-
 use Malzariey\FilamentDaterangepickerFilter\Fields\DateRangePicker;
-
-use Filament\Forms\Components\Grid;
 
 class TambahSuratResource extends Resource
 {
+    // Mengambil Model SuratMasuk
     protected static ?string $model = SuratMasuk::class;
 
+    // Menambahkan Icon di Navigasi
     protected static ?string $navigationIcon = 'heroicon-o-envelope';
 
+    // Mengelompokkan Menu Berdasarkan Navigasi Induk
     protected static ?string $navigationGroup = 'Data Surat';
 
+    // Mengganti Label Navigasi
     protected static ?string $navigationLabel = 'Surat Masuk';
 
+    // Mengganti Label Dari Breadcrumb Sesuai dengan Nama di Menu
     protected static ?string $breadcrumb = "Surat Masuk";
 
     protected static ?string $table = 'No Data Available';
@@ -42,34 +47,37 @@ class TambahSuratResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('nomor_agenda')
                     ->label('Nomor Agenda')
-                    ->required(),
+                    ->disabled() // Field tidak bisa diubah
+                    ->default(fn () => 'SM-' . str_pad(SuratMasuk::count() + 1, 4, '0', STR_PAD_LEFT)),
                 DateRangePicker::make('tanggal_masuk')
                     ->label('Tanggal Masuk')
                     ->required()
                     ->singleCalendar(),
-                Forms\Components\TextInput::make('asal_surat')
+                Forms\Components\Select::make('instansi_id')
                     ->label('Asal Surat')
+                    ->options(Instansi::all()->pluck('nama_instansi', 'id')) // Ambil data dari tabel sifat_surat
+                    ->searchable()
                     ->required(),
                 Forms\Components\TextInput::make('nomor_surat')
                     ->label('Nomor Surat')
-                    ->required(),
+                    ->required()
+                    ->autocomplete(false),
                 DateRangePicker::make('tanggal_surat')
                     ->label('Tanggal Surat')
                     ->required()
                     ->singleCalendar(),
                 Forms\Components\TextInput::make('perihal')
                     ->label('Perihal')
-                    ->required(),
+                    ->required()
+                    ->autocomplete(false),
                 Forms\Components\Textarea::make('keterangan')
                     ->label('Keterangan')
-                    ->required(),
-                Forms\Components\Select::make('sifat_surat')
+                    ->required()
+                    ->autocomplete(false),
+                Forms\Components\Select::make('sifat_surat_id')
                     ->label('Sifat Surat')
-                    ->options([
-                        'Penting' => 'Penting',
-                        'Biasa'   => 'Biasa',
-                        'Rahasia' => 'Rahasia'
-                    ])
+                    ->options(SifatSurat::all()->pluck('nama_sifat', 'id')) // Ambil data dari tabel sifat_surat
+                    ->searchable()
                     ->required(),
             ]);
     }

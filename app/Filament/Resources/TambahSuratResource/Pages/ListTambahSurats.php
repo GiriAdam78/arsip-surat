@@ -12,12 +12,14 @@ class ListTambahSurats extends ListRecords
 
     protected static ?string $title = 'List Surat Masuk';
 
-    protected static ?string $breadcrumb = 'List Data';
+    protected static ?string $breadcrumb = 'List Surat Masuk';
     
     protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make()
+                ->icon('heroicon-o-plus')
+                ->color('primary')
                 ->label('Tambah Data')
         ];
     }

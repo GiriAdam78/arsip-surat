@@ -18,6 +18,7 @@ class ListSuratKeluars extends ListRecords
     {
         return [
             Actions\CreateAction::make()
+                ->icon('heroicon-o-plus')
                 ->label('Tambah Data')
         ];
     }
