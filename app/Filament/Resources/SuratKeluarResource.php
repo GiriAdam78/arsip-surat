@@ -5,6 +5,8 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\SuratKeluarResource\Pages;
 use App\Filament\Resources\SuratKeluarResource\RelationManagers;
 use App\Models\SuratKeluar;
+use App\Models\SuratMasuk;
+use App\Models\Instansi;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -33,8 +35,32 @@ class SuratKeluarResource extends Resource
     {
         return $form
             ->schema([
-                //
-            ]);
+                Forms\Components\Select::make('nomor_agenda')
+                    ->label('Nomor Agenda')
+                    ->options(SuratMasuk::all()->pluck('nomor_agenda', 'nomor_agenda'))
+                    ->searchable()
+                    ->required(),
+                Forms\Components\DatePicker::make('tanggal_keluar')
+                    ->label('Tanggal Keluar')
+                    ->required(),
+                Forms\Components\Select::make('tujuan_surat')
+                    ->label('Tujuan Surat')
+                    ->options(Instansi::all()->pluck('nama_instansi','nama_instansi'))
+                    ->searchable()
+                    ->required(),
+                Forms\Components\Select::make('nomor_surat')
+                    ->label('Nomor Surat')
+                    ->options(SuratMasuk::all()->pluck('nomor_surat','nomor_surat'))
+                    ->searchable()
+                    ->required(),
+                Forms\Components\DatePicker::make('tanggal_surat')
+                    ->label('Tanggal Surat')
+                    ->required(),
+                Forms\Components\TextInput::make('perihal')
+                    ->label('Perihal')
+                    ->required(),
+            ]); 
+
     }
 
     public static function table(Table $table): Table
@@ -42,13 +68,43 @@ class SuratKeluarResource extends Resource
         return $table
             ->emptyStateHeading('No Data Available')
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('id')
+                    ->label('No'),
+                Tables\Columns\TextColumn::make('nomor_agenda')
+                    ->label('Nomor Agenda')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('tanggal_keluar')
+                    ->label('Tanggal Keluar')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('tujuan_surat')
+                    ->label('Tujuan Surat')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('nomor_surat')
+                    ->label('Nomor Surat')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('tanggal_surat')
+                    ->label('Tanggal Surat')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('perihal')
+                    ->label('Perihal')
+                    ->sortable()
+                    ->searchable(),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make()
+                    ->Label('Lihat'),
+                Tables\Actions\EditAction::make()
+                    ->Label('Ubah'),
+                Tables\Actions\DeleteAction::make()
+                    ->Label('Hapus'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

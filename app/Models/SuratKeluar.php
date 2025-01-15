@@ -16,4 +16,10 @@ class SuratKeluar extends Model
         'tanggal_surat',
         'perihal'
     ];
+
+    public function SuratMasuk(){
+        $this->belongsTo(SuratMasuk::class, 'nomor_agenda');
+    }
+
+    
 }

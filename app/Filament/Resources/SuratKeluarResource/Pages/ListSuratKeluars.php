@@ -10,7 +10,7 @@ class ListSuratKeluars extends ListRecords
 {
     protected static string $resource = SuratKeluarResource::class;
 
-    protected static ?string $title = 'Laporan Surat Keluar';
+    protected static ?string $title = 'List Surat Keluar';
 
     protected static ?string $breadcrumb = 'List Surat Keluar';
 

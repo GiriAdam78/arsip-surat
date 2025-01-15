@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\TambahSuratResource\Pages;
 use App\Filament\Resources\TambahSuratResource\RelationManagers;
 use Malzariey\FilamentDaterangepickerFilter\Fields\DateRangePicker;
+use Filament\Forms\Components\RichEditor;
 
 class TambahSuratResource extends Resource
 {
@@ -49,36 +50,36 @@ class TambahSuratResource extends Resource
                     ->label('Nomor Agenda')
                     ->disabled() // Field tidak bisa diubah
                     ->default(fn () => 'SM-' . str_pad(SuratMasuk::count() + 1, 4, '0', STR_PAD_LEFT)),
-                DateRangePicker::make('tanggal_masuk')
+                Forms\Components\DatePicker::make('tanggal_masuk')
                     ->label('Tanggal Masuk')
-                    ->required()
-                    ->singleCalendar(),
-                Forms\Components\Select::make('instansi_id')
+                    ->required(),
+                Forms\Components\Select::make('asal_surat')
                     ->label('Asal Surat')
-                    ->options(Instansi::all()->pluck('nama_instansi', 'id')) // Ambil data dari tabel sifat_surat
+                    ->options(Instansi::all()->pluck('nama_instansi', 'nama_instansi')) // Ambil data dari tabel Asal Surat
                     ->searchable()
                     ->required(),
                 Forms\Components\TextInput::make('nomor_surat')
                     ->label('Nomor Surat')
                     ->required()
                     ->autocomplete(false),
-                DateRangePicker::make('tanggal_surat')
+                Forms\Components\Datepicker::make('tanggal_surat')
                     ->label('Tanggal Surat')
-                    ->required()
-                    ->singleCalendar(),
+                    ->required(),
                 Forms\Components\TextInput::make('perihal')
                     ->label('Perihal')
                     ->required()
                     ->autocomplete(false),
-                Forms\Components\Textarea::make('keterangan')
+                Forms\Components\RichEditor::make('keterangan')
                     ->label('Keterangan')
-                    ->required()
-                    ->autocomplete(false),
-                Forms\Components\Select::make('sifat_surat_id')
-                    ->label('Sifat Surat')
-                    ->options(SifatSurat::all()->pluck('nama_sifat', 'id')) // Ambil data dari tabel sifat_surat
-                    ->searchable()
+                    ->afterStateUpdated(function (string $state, callable $set) {
+                        $set('keterangan', strip_tags($state));
+                    })
                     ->required(),
+                Forms\Components\Select::make('sifat_surat')
+                    ->label('Sifat Surat')
+                    ->options(SifatSurat::all()->pluck('nama_sifat', 'nama_sifat')) // Ambil data dari tabel sifat_surat
+                    ->searchable()
+                    ->required()
             ]);
     }
 

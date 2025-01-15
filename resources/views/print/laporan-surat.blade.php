@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cetak Surat Masuk</title>
-
+    <title>Laporan Surat Masuk - {{ $tanggalMasuk }}</title>
     <style>
-         body {
+        /* Gaya CSS untuk PDF */
+        body {
             font-family: Arial, sans-serif;
         }
         table {
@@ -27,27 +27,23 @@
             text-align: center
         }
         h1{
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 16px
+            font-size: 20px;
         }
-        p{
-            font-family: Arial, Helvetica, sans-serif;
-            text-align: center
-        }
-        .text-align{
-            text-align: right;
+        .float-right{
+            float: right;
             margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <h1 class="text-center">Laporan Surat Masuk</h1>
-    <p class="text-center">Data Semua Surat Masuk</p>
-    <hr style="border-size:1px"/>
 
+    <h1 class="text-center">Laporan Data Surat Masuk</h1>
+    <p class="text-center">Tanggal Laporan : {{ $tanggalMasuk }}</p>
+    <hr/>
     <table>
         <thead>
             <tr>
+                <th>No</th>
                 <th>Nomor Agenda</th>
                 <th>Tanggal Masuk</th>
                 <th>Asal Surat</th>
@@ -59,23 +55,24 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($data as $item)
-            <tr>
-                <td>{{ $item->nomor_agenda }}</td>
-                <td>{{ $item->tanggal_masuk }}</td>
-                <td>{{ $item->asal_surat }}</td>
-                <td>{{ $item->nomor_surat }}</td>
-                <td>{{ $item->tanggal_surat }}</td>
-                <td>{{ $item->perihal }}</td>
-                <td>{{ $item->keterangan }}</td>
-                <td>{{ $item->sifat_surat }}</td>
-            </tr>
+            @foreach($suratMasuk as $index => $surat)
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $surat->nomor_agenda }}</td>
+                    <td>{{ $surat->tanggal_masuk }}</td>
+                    <td>{{ $surat->asal_surat }}</td>
+                    <td>{{ $surat->nomor_surat }}</td>
+                    <td>{{ $surat->tanggal_surat }}</td>
+                    <td>{{ $surat->perihal }}</td>
+                    <td>{{ $surat->keterangan }}</td>
+                    <td>{{ $surat->sifat_surat }}</td>
+                </tr>
             @endforeach
         </tbody>
     </table>
-    <p class="text-align">Jakarta, {{ \Carbon\Carbon::now()->format('d M Y') }}</p>
-    <script>
-        window.print();
-    </script>
+
+    <div class="float-right">
+        <p> Jakarta, {{ \Carbon\Carbon::now()->format('d M Y') }}</p>
+    </div>
 </body>
 </html>

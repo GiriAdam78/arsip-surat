@@ -15,5 +15,6 @@ class CreateSuratKeluar extends CreateRecord
 
     protected static bool $canCreateAnother = false;
 
+    protected static ?string $breadcrumb = 'Tambah Data Surat Keluar';
 
 }

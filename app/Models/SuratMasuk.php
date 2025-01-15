@@ -25,19 +25,26 @@ class SuratMasuk extends Model
 
     // Masukkan Kode Relasi Di Sini (Belongs To, Many To Many, One To Many, Etc)
     public function SifatSurat(){
-        return $this->belongsTo(SifatSurat::class);
+        return $this->belongsTo(SifatSurat::class, 'nama_sifat');
     }
     public function Instansi(){
-        return $this->belongsTo(Instansi::class);
+        return $this->belongsTo(Instansi::class, 'nama_instansi');
     }
 
+    // Membuat Nomor Agenda Secara Otomatis
     protected static function booted()
     {
         static::creating(function ($surat) {
             // Generate Nomor Agenda
             $latestSurat = self::latest('id')->first();
             $lastNumber = $latestSurat ? intval(substr($latestSurat->nomor_agenda, -4)) : 0;
-            $surat->nomor_agenda = 'AGENDA-' . str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
+            $surat->nomor_agenda = 'SM-' . str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
         });
     }
+
+    // Menghilangkan Tag HTML di Dalam Database 
+    public function setContentAttribute($value)
+    {
+        $this->attributes['keterangan'] = strip_tags($value);
+    } 
 }

@@ -2,20 +2,21 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\SuratMasukResource\Pages;
-use App\Filament\Resources\SuratMasukResource\RelationManagers;
-use App\Models\SuratMasuk;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Filters\Filter;
+use Filament\Forms\Form;
+use App\Models\SuratMasuk;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Barryvdh\DomPDF\Facade as PDF;
+use Filament\Actions\ExportAction;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Filters\Filter;
+use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Tables\Actions\Action;
-use Malzariey\FilamentDaterangepickerFilter\Filters\DateRangeFilter;
-use Malzariey\FilamentDaterangepickerFilter\Fields\DateRangePicker;
+use App\Filament\Resources\SuratMasukResource\Pages;
+use App\Filament\Resources\SuratMasukResource\RelationManagers;
 
 class SuratMasukResource extends Resource
 {
@@ -32,7 +33,15 @@ class SuratMasukResource extends Resource
     protected static ?int $navigationSort = 1;
 
 
-
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                Forms\Components\Datepicker::make('tanggal_masuk')
+                    ->label('Tanggal Awal')
+                    ->required()
+            ]);
+    }
     public static function table(Table $table): Table
     {
         return $table
@@ -53,22 +62,24 @@ class SuratMasukResource extends Resource
             ->filters([
                 Filter::make('tanggal_masuk')
                     ->form([
-                        Forms\Components\TextInput::make('tanggal_awal')
-                            ->label('Tanggal Awal'),
-                        Forms\Components\TextInput::make('tanggal_akhir')
-                            ->label('Tanggal Akhir'),
+                        Forms\Components\DatePicker::make('tanggal_masuk')
+                            ->label('Tanggal Masuk')
                     ])
-                    ->query(function (Builder $query, array $data): builder {
-                        return $query
-                            ->when($data['tanggal_awal'], fn ($query, $date) => $query->where('tanggal_masuk', '>=', $date))
-                            ->when($data['tanggal_akhir'], fn ($query, $date) => $query->where('tanggal_masuk', '<=', $date));
-                    })
-               
+                    ->query(fn(Builder $query, array $data) => 
+                        $query->whereDate('tanggal_masuk', $data['tanggal_masuk'])
+                    ),
                     
             ])
             
             ->actions([
-               //
+                Action::make('Print')
+                ->label('Print')
+                ->color('success')
+                ->icon('heroicon-o-printer')
+                ->url(fn ($record) => route('print.laporan-surat', [
+                    'tanggal_masuk' => $record->tanggal_masuk,  // Kirimkan parameter tanggal_masuk sesuai dengan yang dipilih
+                ])) // URL ke route cetak
+                ->openUrlInNewTab(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
