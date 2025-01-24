@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Login Arsip Surat</title>
     {{-- CSS --}}
-    <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{secure_asset('css/bootstrap.min.css')}}">
     {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"> --}}
 </head>
 <body>
@@ -14,7 +14,7 @@
         @yield('content')
     </div>
 
-    <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{secure_asset('js/bootstrap.bundle.min.js')}}"></script>
     {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> --}}
 </body>
 </html>
